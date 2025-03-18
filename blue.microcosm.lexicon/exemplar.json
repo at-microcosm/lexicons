@@ -1,0 +1,153 @@
+{
+  "lexicon": 1,
+  "id": "blue.microcosm.lexicon.exemplar",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "Exemplary data samples for a lexicon def, if hosted by the DID with NSID authority.",
+      "key": "nsid",
+      "record": {
+        "type": "object",
+        "required": ["examples"],
+        "properties": {
+          "examples": {
+            "type": "union",
+            "refs": [
+              "#recordExemplars",
+              "#queryExemplars",
+              "#procedureExemplars",
+              "#subscriptionExemplars",
+            ]
+          }
+        }
+      }
+    },
+
+    "recordExemplars": {
+      "type": "object",
+      "required": ["recordExamples"],
+      "properties": {
+        "recordExamples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["example"],
+            "properties": {
+              "example": {
+                "type": "union",
+                "refs": [
+                  "com.atproto.repo.strongRef",
+                  "#recordLiteralExample"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "recordLiteralExample": {
+      "type": "object",
+      "required": ["key", "record"],
+      "properties": {
+        "key": { "type": "string", "format": "record-key" },
+        "record": { "type": "unknown" }
+      }
+    },
+
+    "queryExemplars": {
+      "type": "object",
+      "required": ["queryExamples"],
+      "properties": {
+        "queryExamples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "parameters": { "type": "ref", "ref": "#exampleParameters"},
+              "output": { "type": "ref", "ref": "#exampleOutput" },
+              "error": { "type": "ref", "ref": "#exampleError" }
+            }
+          }
+        }
+      }
+    },
+
+    "procedureExemplars": {
+      "type": "object",
+      "required": ["procedureExamples"],
+      "properties": {
+        "procedureExamples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "parameters": { "type": "ref", "ref": "#exampleParameters"},
+              "input": { "type": "ref", "ref": "#exampleMessageContent" },
+              "output": { "type": "ref", "ref": "#exampleMessageContent" },
+              "error": { "type": "ref", "ref": "#exampleError" }
+            }
+          }
+        }
+      }
+    },
+
+    "subscriptionExemplars": {
+      "type": "object",
+      "required": ["subscriptionExamples"],
+      "properties": {
+        "subscriptionExamples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "parameters": { "type": "ref", "ref": "#exampleParameters" },
+              "message": { "type": "ref", "ref": "#exampleMessageContent" },
+              "error": { "type": "ref", "ref": "#exampleError" }
+            }
+          }
+        }
+      }
+    },
+
+    "exampleParameters": {
+      "type": "unknown",
+      "description": "Example HTTP procedure parameters of type `params`"
+    },
+
+    "exampleMessageContent": {
+      "type": "object",
+      "description": "Example HTTP request, response, or websocket body",
+      "required": ["encoding"],
+      "properties": {
+        "description": { "type": "string" },
+        "encoding": { "type": "string", "description": "MIME type for body" },
+        "content": {
+          "type": "union",
+          "refs": [
+            "#exampleString",
+            "#exampleBytes",
+            "#exampleBlob",
+            "#exampleCidLink",
+            "#exampleUnknown",
+            "com.atproto.repo.strongRef",
+          ]
+        }
+      },
+    },
+    "exampleString": { "type": "string" },
+    "exampleBytes": { "type": "bytes" },
+    "exampleBlob": { "type": "blob" },
+    "exampleCidLink": { "type": "cid-link" },
+    "exampleUnknown": { "type": "unknown" },
+
+    "exampleError": {
+      "type": "object",
+      "description": "Example error code that could be returned",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "description": "short name for the error type" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

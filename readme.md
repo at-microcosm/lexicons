@@ -1,0 +1,2 @@
+# Lexicon for lexicon examples
+
